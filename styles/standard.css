@@ -1,0 +1,59 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    scroll-behavior: smooth;
+
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+b {
+    font-weight: bolder;
+}
+
+.d_none {
+    display: none;
+}
+
+.d_flex {
+    display: flex;
+}
+
+button:hover {
+    cursor: pointer;
+}
