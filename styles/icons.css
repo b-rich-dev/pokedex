@@ -1,92 +1,89 @@
-.type{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 40px; 
-    height: 40px; 
-    object-fit: cover;
-    margin-right: 4px;
-}
-
-.type img {
-
-    width: 100%; 
-    height: 100%; 
-    padding: 20%;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 0 auto;
-}
-
 .bug {
     background: #92BC2C;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .dark {
     background: #595761;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .dragon {
     background: #0C69C8;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .electric {
     background: #F2D94E;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .fire {
     background: #FBA54C;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .fairy {
     background: #EE90E6;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .fighting {
     background: #D3425F;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .flying {
     background: #A1BBEC;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .ghost {
     background: #5F6DBC;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .grass {
     background: #5FBD58;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .ground {
     background: #DA7C4D;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .ice {
     background: #75D0C1;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .normal {
     background: #A0A29F;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .poison {
     background: #B763CF;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .psychic {
     background: #FA8581;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .rock {
     background: #C9BB8A;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .steel {
     background: #5695A3;
+    box-shadow: inset 0 0 20px #00000062;
 }
 
 .water {
     background: #539DDF;
+    box-shadow: inset 0 0 20px #00000062;
 }

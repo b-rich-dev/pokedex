@@ -46,8 +46,11 @@ function renderPokemon() {
 
         container.innerHTML += `
             <div class="pokemon">
-                <h3>#${pokemon.id} ${capitalize(pokemon.name)}</h3>
-                <img src="${pokemon.image}" alt="${pokemon.name}" />
+                <div class="headline">
+                    <h3>#${pokemon.id}</h3>
+                    <h3>${capitalize(pokemon.name)}</h3>
+                </div>
+                <img src="${pokemon.image}" alt="${pokemon.name}" class="${pokemon.types[0]}" />
                 <div class="types">${typeIcons}</div>
             </div>
         `;
