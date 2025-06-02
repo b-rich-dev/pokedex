@@ -1,0 +1,33 @@
+#content {
+    display: flex;
+    justify-content: center;
+    align-items: normal;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-bottom: 32px;
+    gap: 24px;
+}
+
+.pokemon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    width: 100%;
+    background-color: #082029;
+    border-radius: 16px;
+    margin: 20px;
+}
+
+.pokemon img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn {
+    max-width: 30%;
+    width: 100%;
+    background-color: aqua;
+}
