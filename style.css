@@ -97,6 +97,11 @@
 
 .pokemon:hover {
     cursor: pointer;
+    box-shadow:
+        0 0 15px 5px rgba(255, 255, 255, 0.6),
+        inset 0 0 20px 10px rgba(0, 0, 0, 0.2);
+
+    transform: scale(1.01);
 }
 
 .pokemon h3 {
@@ -108,14 +113,6 @@
     width: 160px;
     height: 160px;
     object-fit: cover;
-}
-
-.pokemon img:hover {
-    box-shadow:
-        0 0 15px 5px rgba(255, 255, 255, 0.6),
-        inset 0 0 20px 10px rgba(0, 0, 0, 0.2);
-
-    transform: scale(1.01);
 }
 
 .headline {
@@ -198,4 +195,173 @@
 
 .button-68:hover {
   box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 1000;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.500);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pokemon-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+    background-color: #082029;
+    border-radius: 16px;
+    /* margin: 20px; */
+}
+
+.pokemon-details h2 {
+    margin: 10px 20px;
+    justify-content: space-around;
+}
+
+.pokemon-details img {
+    background-image: url(./assets/img/pokeball_bizar.png);
+    background-position: right bottom;
+    background-size: 40px;
+    background-repeat: no-repeat;
+    width: 360px;
+    height: 360px;
+    object-fit: cover;
+}
+.headline-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: white;
+}
+
+.name_close {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10%;
+    padding-right: 10%;
+
+    color: white;
+
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.image {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.image img {
+    width: 100%;
+    height: auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #05171E;
+}
+
+.arrow_container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.counter {
+    color: white;
+}
+
+.left-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border-width: 0;
+    background-color: #0D3240;
+}
+
+.left-button:hover {
+    cursor: pointer;
+    border-style: ridge;
+    border-color: white;
+    border-width: 1px;
+}
+
+.left-button img {
+    width: 100%;
+    object-fit: cover;
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border-width: 0;
+    background-color: #0D3240;
+    object-fit: cover;
+}
+
+.right-button:hover {
+    cursor: pointer;
+    border-style: ridge;
+    border-color: white;
+    border-width: 1px;
+}
+
+.right-button img {
+    width: 100%;
+    object-fit: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }

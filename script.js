@@ -2,7 +2,8 @@ let offset = 0;
 const limit = 20;
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
 let pokemonData = [];
-let currentPokemon = [];
+// let currentPokemon = [];
+let currentIndex = 0;
 
 async function init() {
     showSpinner();
@@ -50,7 +51,19 @@ async function loadPokemon() {
                 id: detailData.id,
                 name: detailData.name,
                 image: detailData.sprites.other["home"].front_default,
-                types: detailData.types.map(t => t.type.name)
+                types: detailData.types.map(t => t.type.name),
+
+                url: detailData.url,
+                height: detailData.height,
+                weight: detailData.weight,
+                base_experience: detailData.base_experience,
+                abilities: detailData.abilities.map(a => a.ability.name),
+                stats: detailData.stats.map(s => ({
+                    name: s.stat.name,
+                    value: s.base_stat
+                })),
+
+                
             });
         }
 
@@ -59,7 +72,7 @@ async function loadPokemon() {
 
         if (!data.next) {
             loadMoreButton.disabled = true;
-            loadMoreButton.textContent = "Keine weiteren Pokémon";
+            loadMoreButton.textContent = "no more Pokémon";
         }
     } catch (error) {
         console.error("Fehler beim Laden der Pokémon:", error);
@@ -71,7 +84,7 @@ function renderPokemon() {
     const container = document.getElementById("content");
     container.innerHTML = "";
 
-    pokemonData.forEach(pokemon => {
+    pokemonData.forEach((pokemon, index) => {
         const typeIcons = pokemon.types.map(type => `
             <div class="type">
                 <img src="/assets/icons/${type}.svg"
@@ -82,7 +95,7 @@ function renderPokemon() {
         `).join("");
 
         container.innerHTML += `
-            <div class="pokemon">
+            <div onclick="renderPokemonDetails(${index})" class="pokemon">
                 <div class="headline">
                     <h3>#${pokemon.id}</h3>
                     <h3>${capitalize(pokemon.name)}</h3>
@@ -130,4 +143,40 @@ function filterPokemon() {
     pokemonData = filtered;
     renderPokemon();
     pokemonData = original;
+}
+
+
+function renderPokemonDetails(index){
+    let overlayRef = document.getElementById('overlay');
+    overlayRef.classList.toggle('d_none');
+
+    overlayRef.innerHTML = getOverlayPokemon(index);
+}
+
+
+function getOverlayPokemon(index) {
+    const pokemon = pokemonData[index];
+    
+    return `<div class="overlay-area" onclick="bubblingProtection(event)">
+                <div onclick="renderPokemonDetails(${index})" class="pokemon-details">
+                    <div class="headline-details">
+                        <h2>#${pokemon.id}</h2>
+                        <h2>${capitalize(pokemon.name)}</h2>
+                    </div>
+                    <img src="${pokemon.image}" alt="${pokemon.name}" class="${pokemon.types[0]}" />
+                    <div class="types">{typeIcons}</div>
+                </div>
+                <div id="details-container">
+                    <div>
+                        <div id="details-main">main</div><div id="stats">stats</div><div id="evo-chain">evo chain</div>
+                    </div>
+                    <div id="details-content">
+                    </div>
+                </div>
+            </div>`
+}
+
+// onclick="bubblingProtection(event)"
+function bubblingProtection(event) {
+    event.stopPropagation()
 }
