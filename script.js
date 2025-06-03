@@ -2,7 +2,7 @@ let offset = 0;
 const limit = 20;
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
 let pokemonData = [];
-
+let currentPokemon = [];
 
 async function init() {
     showSpinner();
@@ -104,4 +104,30 @@ async function loadMorePokemon() {
     offset += limit;
     await init();
     document.getElementById("btn").scrollIntoView({ behavior: "smooth" });
+}
+
+
+function filterPokemon() {
+    const searchTerm = document.getElementById("search").value.toLowerCase();
+
+    if (searchTerm === "") {
+        renderPokemon();
+        document.getElementById("btn").style.display = "flex";
+        return;
+    }
+
+    const filtered = pokemonData.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(searchTerm)
+    );
+
+        if (filtered.length === 0) {
+        document.getElementById("content").innerHTML = "<h1>Kein Pokémon gefunden.</h1>";
+        document.getElementById("btn").style.display = "none";
+        return;
+    }
+
+    const original = [...pokemonData];
+    pokemonData = filtered;
+    renderPokemon();
+    pokemonData = original;
 }
