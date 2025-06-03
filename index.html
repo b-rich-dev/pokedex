@@ -16,7 +16,7 @@
     <script src="./script.js" defer></script>
 </head>
 
-<body onload="onloadFunc()">
+<body onload="init()">
     <header>
         <div class="header_container">
             <a href="./index.html">
@@ -27,10 +27,12 @@
         </div>
     </header>
     <main>
-        <div id="main-content">
+        <div id="loader"></div>
+        <p id="loading-p-line">...loading</p>
+        <div id="main-content" style="display: none;" class="animate-bottom">
             <div id="content"></div>
         </div>
-        <button onclick="loadMorePokemon()" class="btn"><h1>More Pokemon</h1></button>
+        <button id="btn" onclick="loadMorePokemon()" class="btn" style="display: none;"><h1>More Pokemon</h1></button>
     </main>
     <footer>
         <div class="footer_container">

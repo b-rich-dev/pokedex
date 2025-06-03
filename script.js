@@ -1,9 +1,26 @@
 const BASE_URL = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0";
 const nextPokemon = "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20";
 
-// let names = [];
-// let urls = [];
 let pokemonData = [];
+let mySpin;
+
+
+function init() {
+    onloadFunc();
+    loadingSpinner();
+}
+
+
+function loadingSpinner() {
+  mySpin = setTimeout(showPage, 3000);
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("loading-headline").style.display = "none";
+  document.getElementById("main-content").style.display = "flex";
+  document.getElementById("btn").style.display = "flex";
+}
 
 
 async function onloadFunc() {
