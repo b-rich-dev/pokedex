@@ -2,22 +2,31 @@ const BASE_URL = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0";
 const nextPokemon = "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20";
 
 let pokemonData = [];
-let mySpin;
 
 
-function init() {
-    onloadFunc();
-    loadingSpinner();
+async function init() {
+    showSpinner();
+    await loadingSpinner();
+    showPage(); 
 }
 
 
-function loadingSpinner() {
-  mySpin = setTimeout(showPage, 3000);
+async function loadingSpinner() {
+    await onloadFunc();
 }
+
+
+function showSpinner() {
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("loading-p-line").style.display = "block";
+    document.getElementById("main-content").style.display = "none";
+    document.getElementById("btn").style.display = "none";
+}
+
 
 function showPage() {
   document.getElementById("loader").style.display = "none";
-  document.getElementById("loading-headline").style.display = "none";
+  document.getElementById("loading-p-line").style.display = "none";
   document.getElementById("main-content").style.display = "flex";
   document.getElementById("btn").style.display = "flex";
 }
