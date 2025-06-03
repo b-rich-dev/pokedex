@@ -23,7 +23,7 @@
                 <img src="./assets/img/pokeball.png" alt="Pokedex_Logo">
                 <h1>Pokedex</h1>
             </a>
-            <input type="text" placeholder="search...">
+            <input onkeydown="filterPokemon()" type="text" placeholder="search...">
         </div>
     </header>
     <main>
@@ -32,7 +32,7 @@
         <div id="main-content" style="display: none;" class="animate-bottom">
             <div id="content"></div>
         </div>
-        <button id="btn" onclick="loadMorePokemon()" class="button-33" role="button" style="display: none;">
+        <button id="btn" onclick="loadMorePokemon()" class="button-68" role="button" style="display: none;">
             <h3>load more Pokemon</h3>
         </button>
     </main>
@@ -45,6 +45,5 @@
         </div>
     </footer>
 </body>
-<div style="background-color: aqua;"></div>
 
 </html>

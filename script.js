@@ -1,18 +1,18 @@
-const BASE_URL = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0";
-const nextPokemon = "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20";
-
+let offset = 0;
+const limit = 20;
+const BASE_URL = "https://pokeapi.co/api/v2/pokemon";
 let pokemonData = [];
 
 
 async function init() {
     showSpinner();
     await loadingSpinner();
-    showPage(); 
+    showPage();
 }
 
 
 async function loadingSpinner() {
-    await onloadFunc();
+    await loadPokemon();
 }
 
 
@@ -25,34 +25,45 @@ function showSpinner() {
 
 
 function showPage() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("loading-p-line").style.display = "none";
-  document.getElementById("main-content").style.display = "flex";
-  document.getElementById("btn").style.display = "flex";
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("loading-p-line").style.display = "none";
+    document.getElementById("main-content").style.display = "flex";
+    document.getElementById("btn").style.display = "flex";
 }
 
 
-async function onloadFunc() {
-    let response = await fetch(BASE_URL);
-    let data = await response.json();
+async function loadPokemon() {
+    try {
+        let url = `${BASE_URL}?limit=${limit}&offset=${offset}`;
+        let response = await fetch(url);
+        let data = await response.json();
 
-    let pokemonList = data.results;
+        let pokemonList = data.results;
+        let newPokemon = [];
 
-    for (let i = 0; i < pokemonList.length; i++) {
-        let detailUrl = pokemonList[i].url;
-        let detailResponse = await fetch(detailUrl);
-        let detailData = await detailResponse.json();
+        for (let i = 0; i < pokemonList.length; i++) {
+            let detailUrl = pokemonList[i].url;
+            let detailResponse = await fetch(detailUrl);
+            let detailData = await detailResponse.json();
 
-        pokemonData.push({
-            id: detailData.id,
-            name: detailData.name,
-            image: detailData.sprites.other["home"].front_default,
-            types: detailData.types.map(t => t.type.name)
-        });
+            newPokemon.push({
+                id: detailData.id,
+                name: detailData.name,
+                image: detailData.sprites.other["home"].front_default,
+                types: detailData.types.map(t => t.type.name)
+            });
+        }
+
+        pokemonData.push(...newPokemon);
+        renderPokemon(newPokemon);
+
+        if (!data.next) {
+            loadMoreButton.disabled = true;
+            loadMoreButton.textContent = "Keine weiteren Pokémon";
+        }
+    } catch (error) {
+        console.error("Fehler beim Laden der Pokémon:", error);
     }
-
-    renderPokemon();
-
 }
 
 
@@ -86,4 +97,11 @@ function renderPokemon() {
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+
+async function loadMorePokemon() {
+    offset += limit;
+    await init();
+    document.getElementById("btn").scrollIntoView({ behavior: "smooth" });
 }
