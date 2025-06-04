@@ -75,7 +75,7 @@ async function loadPokemon() {
             loadMoreButton.textContent = "no more Pokémon";
         }
     } catch (error) {
-        console.error("Fehler beim Laden der Pokémon:", error);
+        console.error("Error loading Pokémon:", error);
     }
 }
 
@@ -134,7 +134,7 @@ function filterPokemon() {
     );
 
         if (filtered.length === 0) {
-        document.getElementById("content").innerHTML = "<h1>Kein Pokémon gefunden.</h1>";
+        document.getElementById("content").innerHTML = "<h1>No Pokémon found</h1>";
         document.getElementById("btn").style.display = "none";
         return;
     }
@@ -146,37 +146,126 @@ function filterPokemon() {
 }
 
 
-function renderPokemonDetails(index){
-    let overlayRef = document.getElementById('overlay');
-    overlayRef.classList.toggle('d_none');
+// function renderPokemonDetails(index){
+//     let overlayRef = document.getElementById('overlay');
+//     overlayRef.classList.toggle('d_none');
 
-    overlayRef.innerHTML = getOverlayPokemon(index);
+//     if (overlayRef.classList.contains('overlay')) {
+        
+//         overlayRef.innerHTML = getOverlayPokemon(index);
+//     }
+// }
+
+
+// function renderPokemonDetails(index) {
+//     let overlayRef = document.getElementById('overlay');
+    
+//     // Wenn das Overlay versteckt ist (d_none = true) → Inhalt rendern + anzeigen
+//     if (overlayRef.classList.contains('d_none')) {
+//         overlayRef.innerHTML = getOverlayPokemon(index);
+//         overlayRef.classList.remove('d_none'); // Overlay anzeigen
+//     } 
+//     // Wenn das Overlay bereits sichtbar ist → nur verstecken (d_none hinzufügen)
+//     else {
+//         overlayRef.classList.add('d_none');
+//     }
+// }
+// Overlay-Listener für Klicks auf den Hintergrund
+document.getElementById('overlay').addEventListener('click', function(event) {
+    // Schließe nur bei Klicks auf den Hintergrund
+    if (!event.target.closest('.overlay-area')) {
+        this.classList.add('d_none');
+    }
+});
+
+function renderPokemonDetails(index) {
+    const overlayRef = document.getElementById('overlay');
+    
+    if (overlayRef.classList.contains('d_none')) {
+        overlayRef.innerHTML = getOverlayPokemon(index);
+        overlayRef.classList.remove('d_none');
+        
+        // Neu: Event-Listener für den Schließen-Button (falls vorhanden)
+        const closeBtn = overlayRef.querySelector('.close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                overlayRef.classList.add('d_none');
+            });
+        }
+    }
+    // Kein else-Zweig mehr nötig, da der Klick-Listener das Overlay schließt
 }
 
+// Funktion muss im globalen Scope sein!
+function bubblingProtection(event) {
+    event.stopPropagation();
+}
 
 function getOverlayPokemon(index) {
     const pokemon = pokemonData[index];
+
+    const typeIcons = pokemon.types.map(type => `
+        <div class="type">
+            <img src="/assets/icons/${type}.svg"
+                alt="${type}"
+                title="${type}"
+                class="icon ${type}"/>
+        </div>
+    `).join("");
     
-    return `<div class="overlay-area" onclick="bubblingProtection(event)">
-                <div onclick="renderPokemonDetails(${index})" class="pokemon-details">
-                    <div class="headline-details">
-                        <h2>#${pokemon.id}</h2>
-                        <h2>${capitalize(pokemon.name)}</h2>
-                    </div>
-                    <img src="${pokemon.image}" alt="${pokemon.name}" class="${pokemon.types[0]}" />
-                    <div class="types">{typeIcons}</div>
+    return `
+        <div class="overlay-area" onclick="bubblingProtection(event)">
+            <div onclick="renderPokemonDetails(${index})" class="pokemon-details">
+                <div class="headline-details">
+                    <h2>#${pokemon.id}</h2>
+                    <h2>${capitalize(pokemon.name)}</h2>
                 </div>
-                <div id="details-container">
-                    <div>
-                        <div id="details-main">main</div><div id="stats">stats</div><div id="evo-chain">evo chain</div>
-                    </div>
-                    <div id="details-content">
-                    </div>
+                <img src="${pokemon.image}" alt="${pokemon.name}" class="${pokemon.types[0]}" />
+                <div class="types">${typeIcons}</div>
+            </div>
+            <div id="details-container">
+                <div class="details-header">
+                    <div id="details-main"><h3>main</h3></div>
+                    <div id="stats"><h3>stats</h3></div>
+                    <div id="evo-chain"><h3>evo chain</h3></div>
                 </div>
-            </div>`
+                <div id="details-content-main">
+                    <table>
+                        <tr>
+                            <td>Height</td>
+                            <td>: ${convertHeight(pokemon.height)} m</td>
+                        </tr>
+                        <tr>
+                            <td>Weight</td>
+                            <td>: ${convertWeight(pokemon.weight)} kg</td>
+                        </tr>
+                        <tr>
+                            <td>Base experience</td>
+                            <td>: ${pokemon.base_experience}</td>
+                        </tr>
+                        <tr>
+                            <td>Abilitis</td>
+                            <td>${pokemon.abilities.map(a => `<div class="ability">: ${a}</div>`).join('')}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="details-content-stats" style="display: none;"></div>
+                <div id="details-content-evo-chain" style="display: none;"></div>
+            </div>
+        </div>`
 }
 
-// onclick="bubblingProtection(event)"
-function bubblingProtection(event) {
-    event.stopPropagation()
+
+function convertHeight(height) {
+    return (height / 10).toFixed(1);
 }
+
+
+function convertWeight(weight) {
+    return (weight / 10).toFixed(1);
+}
+
+
+// function bubblingProtection(event) {
+//     event.stopPropagation();
+// }
