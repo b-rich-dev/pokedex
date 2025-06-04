@@ -224,10 +224,12 @@ function getOverlayPokemon(index) {
                 <div class="types">${typeIcons}</div>
             </div>
             <div id="details-container">
-                <div class="details-header">
-                    <div id="details-main"><h3>main</h3></div>
-                    <div id="stats"><h3>stats</h3></div>
-                    <div id="evo-chain"><h3>evo chain</h3></div>
+                <div class="tab-container">
+                    <div id="details-main" class="tab active"><h3>main</h3></div>
+                    
+                    <div id="stats" class="tab"><h3>stats</h3></div>
+                    
+                    <div id="evo-chain" class="tab"><h3>evo chain</h3></div>
                 </div>
                 <div id="details-content-main">
                     <table>
