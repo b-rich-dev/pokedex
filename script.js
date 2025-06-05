@@ -63,7 +63,7 @@ async function loadPokemon() {
                     value: s.base_stat
                 })),
 
-                
+
             });
         }
 
@@ -133,7 +133,7 @@ function filterPokemon() {
         pokemon.name.toLowerCase().includes(searchTerm)
     );
 
-        if (filtered.length === 0) {
+    if (filtered.length === 0) {
         document.getElementById("content").innerHTML = "<h1>No Pokémon found</h1>";
         document.getElementById("btn").style.display = "none";
         return;
@@ -151,7 +151,7 @@ function filterPokemon() {
 //     overlayRef.classList.toggle('d_none');
 
 //     if (overlayRef.classList.contains('overlay')) {
-        
+
 //         overlayRef.innerHTML = getOverlayPokemon(index);
 //     }
 // }
@@ -159,7 +159,7 @@ function filterPokemon() {
 
 // function renderPokemonDetails(index) {
 //     let overlayRef = document.getElementById('overlay');
-    
+
 //     // Wenn das Overlay versteckt ist (d_none = true) → Inhalt rendern + anzeigen
 //     if (overlayRef.classList.contains('d_none')) {
 //         overlayRef.innerHTML = getOverlayPokemon(index);
@@ -171,7 +171,7 @@ function filterPokemon() {
 //     }
 // }
 // Overlay-Listener für Klicks auf den Hintergrund
-document.getElementById('overlay').addEventListener('click', function(event) {
+document.getElementById('overlay').addEventListener('click', function (event) {
     // Schließe nur bei Klicks auf den Hintergrund
     if (!event.target.closest('.overlay-area')) {
         this.classList.add('d_none');
@@ -180,11 +180,11 @@ document.getElementById('overlay').addEventListener('click', function(event) {
 
 function renderPokemonDetails(index) {
     const overlayRef = document.getElementById('overlay');
-    
+
     if (overlayRef.classList.contains('d_none')) {
         overlayRef.innerHTML = getOverlayPokemon(index);
         overlayRef.classList.remove('d_none');
-        
+
         // Neu: Event-Listener für den Schließen-Button (falls vorhanden)
         const closeBtn = overlayRef.querySelector('.close-btn');
         if (closeBtn) {
@@ -212,49 +212,87 @@ function getOverlayPokemon(index) {
                 class="icon ${type}"/>
         </div>
     `).join("");
-    
+
+   
+
+    const maxStat = {
+        hp: 255,
+        attack: 190,
+        defense: 230,
+        'special-attack': 194,
+        'special-defense': 230,
+        speed: 200
+    };
+console.log('DEBUG stats:', pokemon.stats);
+
+    const statBarsHtml = pokemon.stats.map(s => {
+        const statName = s.name;
+        const base = s.value;
+        const max = maxStat[statName] || 255;
+        const percentage = Math.round((base / max) * 100);
+
+        return `
+            <div class="stats-container">
+                <div class="p-tag">${statName}</div>
+                <div class="bar">
+                    <div class="inner-bar" style="width: ${percentage}%;"></div>
+                </div>
+            </div>
+        `;}).join('');
+
     return `
         <div class="overlay-area" onclick="bubblingProtection(event)">
-            <div onclick="renderPokemonDetails(${index})" class="pokemon-details">
+            <div class="pokemon-details">
                 <div class="headline-details">
                     <h2>#${pokemon.id}</h2>
                     <h2>${capitalize(pokemon.name)}</h2>
                 </div>
-                <img src="${pokemon.image}" alt="${pokemon.name}" class="${pokemon.types[0]}" />
+                <div class="${pokemon.types[0]} img-container">
+                    <img src="${pokemon.image}" alt="${pokemon.name}" />
+                </div>
                 <div class="types">${typeIcons}</div>
-            </div>
-            <div id="details-container">
-                <div class="tab-container">
-                    <div id="details-main" class="tab active"><h3>main</h3></div>
-                    
-                    <div id="stats" class="tab"><h3>stats</h3></div>
-                    
-                    <div id="evo-chain" class="tab"><h3>evo chain</h3></div>
+                <div id="details-container">
+                    <div class="tab-container">
+                        <div id="details-main" onclick="changeToMain()" class="tab active"><h2>main</h2></div>
+                        <div id="stats" onclick="changeToStats()" class="tab"><h2>stats</h2></div>
+                        <div id="evo-chain" onclick="changeToEvoChain()" class="tab"><h2>evo chain</h2></div>
+                    </div>
+                    <div id="details-content-main">
+                        <table>
+                            <tr>
+                                <td>Height</td>
+                                <td>: ${convertHeight(pokemon.height)} m</td>
+                            </tr>
+                            <tr>
+                                <td>Weight</td>
+                                <td>: ${convertWeight(pokemon.weight)} kg</td>
+                            </tr>
+                            <tr>
+                                <td>Base experience</td>
+                                <td>: ${pokemon.base_experience}</td>
+                            </tr>
+                            <tr>
+                                <td>Abilitis</td>
+                                <td>${pokemon.abilities.map(a => `<div class="ability">: ${a}</div>`).join('')}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="details-content-stats" style="display: none;">
+                        ${statBarsHtml}
+                    </div>
+                    <div id="details-content-evo-chain" style="display: none;"></div>
                 </div>
-                <div id="details-content-main">
-                    <table>
-                        <tr>
-                            <td>Height</td>
-                            <td>: ${convertHeight(pokemon.height)} m</td>
-                        </tr>
-                        <tr>
-                            <td>Weight</td>
-                            <td>: ${convertWeight(pokemon.weight)} kg</td>
-                        </tr>
-                        <tr>
-                            <td>Base experience</td>
-                            <td>: ${pokemon.base_experience}</td>
-                        </tr>
-                        <tr>
-                            <td>Abilitis</td>
-                            <td>${pokemon.abilities.map(a => `<div class="ability">: ${a}</div>`).join('')}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div id="details-content-stats" style="display: none;"></div>
-                <div id="details-content-evo-chain" style="display: none;"></div>
             </div>
         </div>`
+}
+
+
+function convertHp(hp) {
+    return ((hp / (2 * hp + 204)) * 100).toFixed(2);
+}
+
+function convertBaseStat(baseStat) {
+    return (2 * baseStat + 99).toFixed(0);
 }
 
 
@@ -268,6 +306,34 @@ function convertWeight(weight) {
 }
 
 
+function changeToMain() {
+    document.getElementById("stats").classList.remove("active");
+    document.getElementById("evo-chain").classList.remove("active");
+    document.getElementById("details-content-main").style.display = "flex";
+    document.getElementById("details-content-stats").style.display = "none";
+    document.getElementById("details-content-evo-chain").style.display = "none";
+    document.getElementById("details-main").classList.add("active");
+}
+
+
+function changeToStats() {
+    document.getElementById("details-main").classList.remove("active");
+    document.getElementById("evo-chain").classList.remove("active");
+    document.getElementById("details-content-stats").style.display = "flex";
+    document.getElementById("details-content-main").style.display = "none";
+    document.getElementById("details-content-evo-chain").style.display = "none";
+    document.getElementById("stats").classList.add("active");
+}
+
+
+function changeToEvoChain() {
+    document.getElementById("stats").classList.remove("active");
+    document.getElementById("details-main").classList.remove("active");
+    document.getElementById("details-content-evo-chain").style.display = "flex";
+    document.getElementById("details-content-stats").style.display = "none";
+    document.getElementById("details-content-main").style.display = "none";
+    document.getElementById("evo-chain").classList.add("active");
+}
 // function bubblingProtection(event) {
 //     event.stopPropagation();
 // }

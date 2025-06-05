@@ -67,6 +67,49 @@
             <img src="icons/water.svg" />
         </div>
     </div>
+    <div class="overlay-area" onclick="bubblingProtection(event)">
+            <div onclick="renderPokemonDetails(${index})" class="pokemon-details">
+                <div class="headline-details">
+                    <h2>#${pokemon.id}</h2>
+                    <h2>${capitalize(pokemon.name)}</h2>
+                </div>
+                <img src="${pokemon.image}" alt="${pokemon.name}" class="${pokemon.types[0]}" />
+                <div class="types">${typeIcons}</div>
+            </div>
+            <div id="details-container">
+                <div class="tab-container">
+                    <div id="details-main" onclick="changeToMain()" class="tab active"><h3>main</h3></div>
+                    
+                    <div id="stats" onclick="changeToStats()" class="tab"><h3>stats</h3></div>
+                    
+                    <div id="evo-chain" onclick="changeToEvoChain()" class="tab"><h3>evo chain</h3></div>
+                </div>
+                <div id="details-content-main">
+                    <table>
+                        <tr>
+                            <td>Height</td>
+                            <td>: ${convertHeight(pokemon.height)} m</td>
+                        </tr>
+                        <tr>
+                            <td>Weight</td>
+                            <td>: ${convertWeight(pokemon.weight)} kg</td>
+                        </tr>
+                        <tr>
+                            <td>Base experience</td>
+                            <td>: ${pokemon.base_experience}</td>
+                        </tr>
+                        <tr>
+                            <td>Abilitis</td>
+                            <td>${pokemon.abilities.map(a => `<div class="ability">: ${a}</div>`).join('')}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="details-content-stats" style="width: 80px;"></div>
+                <div id="details-content-evo-chain" style="display: none;"></div>
+            </div>
+        </div>
+
+        
 </body>
 
 </html>
