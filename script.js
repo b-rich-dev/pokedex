@@ -33,6 +33,23 @@ function showPage() {
 }
 
 
+async function extractEvolutionDataWithImages(chain) {
+    const evolution = [];
+
+    for (let current = chain; current != null; current = current.evolves_to?.[0]) {
+        const name = current.species.name;
+        const response = await fetch(current.species.url);
+        const data = await response.json();
+        const id = data.id;
+        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`;
+        evolution.push({ name, image });
+    }
+
+    return evolution;
+}
+
+
+
 async function loadPokemon() {
     try {
         let url = `${BASE_URL}?limit=${limit}&offset=${offset}`;
@@ -46,6 +63,19 @@ async function loadPokemon() {
             let detailUrl = pokemonList[i].url;
             let detailResponse = await fetch(detailUrl);
             let detailData = await detailResponse.json();
+
+
+            let speciesResponse = await fetch(detailData.species.url);
+            let speciesData = await speciesResponse.json();
+
+            let evoChainUrl = speciesData.evolution_chain?.url;
+
+            let evolution = [];
+            if (evoChainUrl) {
+                let evoResponse = await fetch(evoChainUrl);
+                let evoData = await evoResponse.json();
+                evolution = await extractEvolutionDataWithImages(evoData.chain);
+            }
 
             newPokemon.push({
                 id: detailData.id,
@@ -62,7 +92,8 @@ async function loadPokemon() {
                     name: s.stat.name,
                     value: s.base_stat
                 })),
-
+                evolution_chain_url: evoChainUrl,
+                evolution_chain: evolution
 
             });
         }
@@ -196,10 +227,11 @@ function renderPokemonDetails(index) {
     // Kein else-Zweig mehr nötig, da der Klick-Listener das Overlay schließt
 }
 
-// Funktion muss im globalen Scope sein!
+
 function bubblingProtection(event) {
     event.stopPropagation();
 }
+
 
 function getOverlayPokemon(index) {
     const pokemon = pokemonData[index];
@@ -213,7 +245,9 @@ function getOverlayPokemon(index) {
         </div>
     `).join("");
 
-   
+    // const evolutionHtml = pokemon.evolution_chain.map((name, i) => {
+    //     return `<span class="evo-step">${capitalize(name)}</span>${i < pokemon.evolution_chain.length - 1 ? ' ➜ ' : ''}`;
+    // }).join('');
 
     const maxStat = {
         hp: 255,
@@ -223,7 +257,7 @@ function getOverlayPokemon(index) {
         'special-defense': 230,
         speed: 200
     };
-console.log('DEBUG stats:', pokemon.stats);
+
 
     const statBarsHtml = pokemon.stats.map(s => {
         const statName = s.name;
@@ -238,7 +272,39 @@ console.log('DEBUG stats:', pokemon.stats);
                     <div class="inner-bar" style="width: ${percentage}%;"></div>
                 </div>
             </div>
-        `;}).join('');
+        `;
+    }).join('');
+
+
+    let evolutionHtml = "";
+
+    if (Array.isArray(pokemon.evolution_chain) && pokemon.evolution_chain.length > 0) {
+        for (let i = 0; i < pokemon.evolution_chain.length; i++) {
+            const evo = pokemon.evolution_chain[i];
+            evolutionHtml += `
+            <div class="evolution-entry">
+                <img class="evo-img" src="${evo.image}" alt="${evo.name}" />
+                <h3>${capitalize(evo.name)}</h3>
+            </div>
+        `;
+
+            // Nur Pfeil hinzufügen, wenn nicht letztes Element
+            if (i < pokemon.evolution_chain.length - 1) {
+                evolutionHtml += `<div class="evo-arrow">»</div>`;
+            }
+        }
+    } else {
+        evolutionHtml = '<p>No evolution data available.</p>';
+    }
+
+    // const evolutionHtml = Array.isArray(pokemon.evolution_chain) ?
+    //     pokemon.evolution_chain.map(evo => `
+    //         <div class="evolution-entry">
+    //             <img class="evo-img" src="${evo.image}" alt="${evo.name}" />
+    //             <h3>${capitalize(evo.name)}</h3>
+    //         </div>
+    //     `).join('') : '<p>No evolution data available.</p>';
+
 
     return `
         <div class="overlay-area" onclick="bubblingProtection(event)">
@@ -248,7 +314,7 @@ console.log('DEBUG stats:', pokemon.stats);
                     <h2>${capitalize(pokemon.name)}</h2>
                 </div>
                 <div class="${pokemon.types[0]} img-container">
-                    <img src="${pokemon.image}" alt="${pokemon.name}" />
+                    <img class="pokemon-details-img" src="${pokemon.image}" alt="${pokemon.name}" />
                 </div>
                 <div class="types">${typeIcons}</div>
                 <div id="details-container">
@@ -280,7 +346,9 @@ console.log('DEBUG stats:', pokemon.stats);
                     <div id="details-content-stats" style="display: none;">
                         ${statBarsHtml}
                     </div>
-                    <div id="details-content-evo-chain" style="display: none;"></div>
+                    <div id="details-content-evo-chain" style="display: none;">
+                            ${evolutionHtml}
+                    </div>
                 </div>
             </div>
         </div>`
