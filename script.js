@@ -166,12 +166,15 @@ function filterPokemon() {
 }
 
 
-document.getElementById('overlay').addEventListener('click', function (event) {
+const overlay = document.getElementById('overlay');
+if (overlay) {
+  overlay.addEventListener('click', function(event) {
     if (!event.target.closest('.overlay-area')) {
-        this.classList.add('d_none'),
-            document.body.classList.remove('no-scroll');
+      this.classList.add('d_none');
+      document.body.classList.remove('no-scroll');
     }
-});
+  });
+}
 
 
 function renderPokemonDetails(index) {
@@ -192,22 +195,7 @@ function renderPokemonDetails(index) {
     overlayRef.classList.remove('d_none');
     document.body.classList.add('no-scroll');
 }
-// function renderPokemonDetails(index) {
-//     currentIndex = index;
 
-//     const overlayRef = document.getElementById('overlay');
-//     overlayRef.classList.add('d_none'); // kurz verstecken
-
-//     // Leeren & komplett neu einsetzen (härtere Methode)
-//     overlayRef.innerHTML = ''; // leere es sicherheitshalber
-//     const html = getOverlayPokemon(index);
-//     overlayRef.insertAdjacentHTML('afterbegin', html); // robuster als innerHTML = ...
-
-//     toggleCloseButton(); // jetzt ist der Button sicher da
-
-//     overlayRef.classList.remove('d_none'); // wieder anzeigen
-//     document.body.classList.add('no-scroll');
-// }
 
 function bubblingProtection(event) {
     event.stopPropagation();
@@ -222,7 +210,7 @@ function getOverlayPokemon(index) {
     const evolutionHtml = createEvolutionChain(pokemon.evolution_chain);
     const tabMainHtml = createTabContentMain(pokemon);
     const navigationHtml = createNavigation();
-    console.log(pokemon.name);
+
     return createOverlayTemplate(
         pokemon,
         typeIcons,
