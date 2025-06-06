@@ -22,7 +22,7 @@ function buildPokemonObject(detail, species, evolution) {
 function createTypeIconsHTML(types) {
     return types.map(type => `
         <div class="type">
-            <img src="/assets/icons/${type}.svg"
+            <img src="./assets/icons/${type}.svg"
                  alt="${type}"
                  title="${type}"
                  class="icon ${type}"/>
@@ -77,7 +77,7 @@ function createOverlayTemplate(pokemon, typeIcons, statBarsHtml, evolutionHtml, 
 function createTypeIcons(types) {
     return types.map(type => `
         <div class="type">
-            <img src="/assets/icons/${type}.svg" alt="${type}" title="${type}" class="icon ${type}"/>
+            <img src="./assets/icons/${type}.svg" alt="${type}" title="${type}" class="icon ${type}"/>
         </div>
     `).join("");
 }

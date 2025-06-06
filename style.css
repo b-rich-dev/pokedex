@@ -461,10 +461,15 @@ table {
         flex-direction: column;
         gap: unset;
         padding: unset;
+        min-height: 304px;
+    }
+
+    #details-content-stats{
+        min-height: 304px;
     }
 
     #details-content-main {
-        min-height: 281px;
+        min-height: 304px;
     }
 
     .evolution-entry {
@@ -483,6 +488,12 @@ table {
     .evo-arrow {
         display: inline-block;
         transform: rotate(90deg);
+    }
+
+    .evo-img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 8px;
     }
 
 }
