@@ -52,6 +52,7 @@ function createOverlayTemplate(pokemon, typeIcons, statBarsHtml, evolutionHtml, 
                 <div class="headline-details">
                     <h2>#${pokemon.id}</h2>
                     <h2>${capitalize(pokemon.name)}</h2>
+                    <div id="close-button" onclick="closeOverlay()" style="display: none;">✖</div>
                 </div>
                 <div class="${pokemon.types[0]} img-container">
                     <img class="pokemon-details-img" src="${pokemon.image}" alt="${pokemon.name}" />

@@ -154,7 +154,7 @@
 .button-68 {
     appearance: none;
     backface-visibility: hidden;
-    background-color: #31b9d4;
+    background-color: #124758;
     border-radius: 8px;
     border-style: none;
     box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
@@ -450,4 +450,35 @@ table {
 
 .forward_button:hover {
     cursor: pointer;
+}
+
+.background_image {
+    background-image: url(./assets/img/pokemon_enton.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: auto;
+}
+
+#close-button {
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin: 20px 20px;
+    object-fit: cover;
+    font-size: 24px;
+   filter: invert(1);
+    cursor: pointer;
+
+}
+
+@media (max-width: 520px) {
+    .header_container {
+        flex-direction: column;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
 }
