@@ -210,21 +210,15 @@ document.getElementById('overlay').addEventListener('click', function (event) {
 });
 
 function renderPokemonDetails(index) {
+    currentIndex = index;
     const overlayRef = document.getElementById('overlay');
 
-    if (overlayRef.classList.contains('d_none')) {
-        overlayRef.innerHTML = getOverlayPokemon(index);
-        overlayRef.classList.remove('d_none');
-
-        // Neu: Event-Listener für den Schließen-Button (falls vorhanden)
-        const closeBtn = overlayRef.querySelector('.close-btn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                overlayRef.classList.add('d_none');
-            });
-        }
-    }
-    // Kein else-Zweig mehr nötig, da der Klick-Listener das Overlay schließt
+    // if (overlayRef.classList.contains('d_none')) {
+    //     overlayRef.innerHTML = getOverlayPokemon(index);
+    //     overlayRef.classList.remove('d_none');
+    // }
+    overlayRef.innerHTML = getOverlayPokemon(index);
+    overlayRef.classList.remove('d_none');
 }
 
 
@@ -350,18 +344,17 @@ function getOverlayPokemon(index) {
                             ${evolutionHtml}
                     </div>
                 </div>
+                <div class="navigation">
+                    <img src="./assets/icons/chevron-back-outline.svg" alt="Back buttton" class="back_button" onclick="goBack()">
+                    <img src="./assets/img/pokemon-seeklogo.png" alt="Pokemon Logo" class="pokemon_logo">
+                    <img src="./assets/icons/chevron-forward-outline.svg" alt="Forward button" id="forward-button" class="forward_button" onclick="goForward()">
+                </div>
             </div>
         </div>`
 }
 
 
-function convertHp(hp) {
-    return ((hp / (2 * hp + 204)) * 100).toFixed(2);
-}
 
-function convertBaseStat(baseStat) {
-    return (2 * baseStat + 99).toFixed(0);
-}
 
 
 function convertHeight(height) {
@@ -402,6 +395,17 @@ function changeToEvoChain() {
     document.getElementById("details-content-main").style.display = "none";
     document.getElementById("evo-chain").classList.add("active");
 }
-// function bubblingProtection(event) {
-//     event.stopPropagation();
-// }
+
+function goBack() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderPokemonDetails(currentIndex);
+    }
+}
+
+function goForward() {
+        if (currentIndex < pokemonData.length - 1) {
+            currentIndex++;
+            renderPokemonDetails(currentIndex);
+        }
+}
