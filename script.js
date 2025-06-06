@@ -205,7 +205,8 @@ function filterPokemon() {
 document.getElementById('overlay').addEventListener('click', function (event) {
     // Schließe nur bei Klicks auf den Hintergrund
     if (!event.target.closest('.overlay-area')) {
-        this.classList.add('d_none');
+        this.classList.add('d_none'),
+        document.body.classList.remove('no-scroll');;
     }
 });
 
@@ -219,6 +220,7 @@ function renderPokemonDetails(index) {
     // }
     overlayRef.innerHTML = getOverlayPokemon(index);
     overlayRef.classList.remove('d_none');
+    document.body.classList.add('no-scroll');
 }
 
 
