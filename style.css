@@ -469,16 +469,46 @@ table {
     margin: 20px 20px;
     object-fit: cover;
     font-size: 24px;
-   filter: invert(1);
+    filter: invert(1);
     cursor: pointer;
 
 }
 
 @media (max-width: 520px) {
+
     .header_container {
         flex-direction: column;
         padding-top: 5px;
         padding-bottom: 5px;
+    }
+
+
+    #details-content-evo-chain {
+        flex-direction: column;
+        gap: unset;
+        padding: unset;
+    }
+
+    #details-content-main {
+        min-height: 281px;
+    }
+
+    .evolution-entry {
+        margin: unset;
+    }
+
+    .evolution-entry {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+        padding: 0 20px 0 20px;
+        justify-content: space-around;
+        margin: unset;
+    }
+
+    .evo-arrow {
+        display: inline-block;
+        transform: rotate(90deg);
     }
 
 }
