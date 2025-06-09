@@ -9,9 +9,9 @@ window.addEventListener("resize", toggleCloseButton);
 
 
 async function init() {
-    showSpinner();
-    await loadingSpinner();
-    showPage();
+    toggleLoading(true);
+    await loadPokemon();
+    toggleLoading(false);
 }
 
 
@@ -20,54 +20,77 @@ async function loadingSpinner() {
 }
 
 
-function showSpinner() {
-    document.getElementById("loader").style.display = "block";
-    document.getElementById("loading-p-line").style.display = "block";
-    document.getElementById("main-content").style.display = "none";
-    document.getElementById("btn").style.display = "none";
-    document.getElementById("main").classList.add("background_image");
-}
+function toggleLoading(isLoading) {
+    const display = isLoading ? "block" : "none";
+    const contentDisplay = isLoading ? "none" : "flex";
 
+    document.getElementById("loader").style.display = display;
+    document.getElementById("loading-p-line").style.display = display;
+    document.getElementById("main-content").style.display = contentDisplay;
+    document.getElementById("btn").style.display = contentDisplay;
 
-function showPage() {
-    document.getElementById("loader").style.display = "none";
-    document.getElementById("loading-p-line").style.display = "none";
-    document.getElementById("main-content").style.display = "flex";
-    document.getElementById("btn").style.display = "flex";
-    document.getElementById("main").classList.remove("background_image");
+    document.getElementById("main").classList.toggle("background_image", isLoading);
 }
 
 
 async function loadPokemon() {
     try {
-        const url = `${BASE_URL}?limit=${limit}&offset=${offset}`;
-        const data = await fetchJson(url);
+        const data = await fetchPokemonList();
+        const detailDataList = await fetchAllDetails(data.results);
+        const speciesDataList = await fetchAllSpecies(detailDataList);
+        const evolutionChains = await fetchAllEvolutions(speciesDataList);
 
-        const detailPromises = data.results.map(p => fetchJson(p.url));
-        const detailDataList = await Promise.all(detailPromises);
+        const newPokemon = buildAllPokemonObjects(detailDataList, speciesDataList, evolutionChains);
 
-        const speciesPromises = detailDataList.map(d => fetchJson(d.species.url));
-        const speciesDataList = await Promise.all(speciesPromises);
-
-        const evoPromises = speciesDataList.map(s =>
-            s.evolution_chain?.url ? fetchJson(s.evolution_chain.url) : null
-        );
-        const evoDataList = await Promise.all(evoPromises);
-
-        const evolutionChains = await Promise.all(
-            evoDataList.map(e => e ? extractEvolutionDataWithImages(e.chain) : [])
-        );
-
-        const newPokemon = detailDataList.map((detail, i) =>
-            buildPokemonObject(detail, speciesDataList[i], evolutionChains[i])
-        );
-
-        pokemonData.push(...newPokemon);
-        renderPokemon(newPokemon);
-        disableLoadIfNoNext(data.next);
+        handleLoadedPokemon(newPokemon, data);;
     } catch (error) {
         console.error("Error loading Pokémon:", error);
     }
+}
+
+
+async function fetchPokemonList() {
+    const url = `${BASE_URL}?limit=${limit}&offset=${offset}`;
+    return await fetchJson(url);
+}
+
+
+async function fetchAllDetails(results) {
+    const promises = results.map(p => fetchJson(p.url));
+    return await Promise.all(promises);
+}
+
+
+async function fetchAllSpecies(details) {
+    const promises = details.map(d => fetchJson(d.species.url));
+    return await Promise.all(promises);
+}
+
+
+async function fetchAllEvolutions(speciesList) {
+    const evoPromises = speciesList.map(s =>
+        s.evolution_chain?.url ? fetchJson(s.evolution_chain.url) : null
+    );
+
+    const evoDataList = await Promise.all(evoPromises);
+
+    return await Promise.all(
+        evoDataList.map(e => e ? extractEvolutionDataWithImages(e.chain) : [])
+    );
+}
+
+
+function buildAllPokemonObjects(details, speciesList, evolutionChains) {
+    return details.map((detail, i) =>
+        buildPokemonObject(detail, speciesList[i], evolutionChains[i])
+    );
+}
+
+
+function handleLoadedPokemon(newPokemon, data) {
+    pokemonData.push(...newPokemon);
+    renderPokemon(newPokemon);
+    disableLoadIfNoNext(data.next);
 }
 
 
@@ -144,36 +167,58 @@ function filterPokemon() {
     const searchTerm = document.getElementById("search").value.toLowerCase();
 
     if (searchTerm === "") {
-        renderPokemon();
-        document.getElementById("btn").style.display = "flex";
-        return;
+        return showAllPokemon();
     }
 
-    const filtered = pokemonData.filter(pokemon =>
-        pokemon.name.toLowerCase().includes(searchTerm)
-    );
+    const filtered = getFilteredPokemon(searchTerm);
 
     if (filtered.length === 0) {
-        document.getElementById("content").innerHTML = "<h1>No Pokémon found</h1>";
-        document.getElementById("btn").style.display = "none";
-        return;
+        return showNoResults();
     }
 
+    showFilteredPokemon(filtered);
+}
+
+
+function showAllPokemon() {
+    renderPokemon();
+    setLoadButtonVisible(true);
+}
+
+
+function getFilteredPokemon(searchTerm) {
+    return pokemonData.filter(pokemon => pokemon.name.toLowerCase().includes(searchTerm));
+}
+
+
+function showNoResults() {
+    document.getElementById("content").innerHTML = "<h1>No Pokémon found</h1>";
+    setLoadButtonVisible(false);
+}
+
+
+function showFilteredPokemon(filtered) {
     const original = [...pokemonData];
     pokemonData = filtered;
     renderPokemon();
     pokemonData = original;
+    setLoadButtonVisible(false);
+}
+
+
+function setLoadButtonVisible(visible) {
+    document.getElementById("btn").style.display = visible ? "flex" : "none";
 }
 
 
 const overlay = document.getElementById('overlay');
 if (overlay) {
-  overlay.addEventListener('click', function(event) {
-    if (!event.target.closest('.overlay-area')) {
-      this.classList.add('d_none');
-      document.body.classList.remove('no-scroll');
-    }
-  });
+    overlay.addEventListener('click', function (event) {
+        if (!event.target.closest('.overlay-area')) {
+            this.classList.add('d_none');
+            document.body.classList.remove('no-scroll');
+        }
+    });
 }
 
 
@@ -185,15 +230,18 @@ function renderPokemonDetails(index) {
     overlayRef.innerHTML = getOverlayPokemon(index);
     toggleCloseButton();
 
-    overlayRef.onclick = function (event) {
-        if (!event.target.closest('.overlay-area')) {
-            this.classList.add('d_none');
-            document.body.classList.remove('no-scroll');
-        }
-    };
+    overlayRef.onclick = handleOverlayClick;
 
     overlayRef.classList.remove('d_none');
     document.body.classList.add('no-scroll');
+}
+
+
+function handleOverlayClick(event) {
+    if (!event.target.closest('.overlay-area')) {
+        event.currentTarget.classList.add('d_none');
+        document.body.classList.remove('no-scroll');
+    }
 }
 
 
