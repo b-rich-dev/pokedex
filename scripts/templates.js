@@ -60,9 +60,9 @@ function createOverlayTemplate(pokemon, typeIcons, statBarsHtml, evolutionHtml, 
                 <div class="types">${typeIcons}</div>
                 <div id="details-container">
                     <div class="tab-container">
-                        <div id="details-main" onclick="changeToMain()" class="tab active"><h2>main</h2></div>
-                        <div id="stats" onclick="changeToStats()" class="tab"><h2>stats</h2></div>
-                        <div id="evo-chain" onclick="changeToEvoChain()" class="tab"><h2>evo chain</h2></div>
+                        <div id="details-main" onclick="changeTab('main')" class="tab active"><h2>main</h2></div>
+                        <div id="stats" onclick="changeTab('stats')" class="tab"><h2>stats</h2></div>
+                        <div id="evo-chain" onclick="changeTab('evo-chain')" class="tab"><h2>evo chain</h2></div>
                     </div>
                     <div id="details-content-main">${tabMainHtml}</div>
                     <div id="details-content-stats" style="display: none;">${statBarsHtml}</div>

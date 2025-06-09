@@ -232,33 +232,16 @@ function convertWeight(weight) {
 }
 
 
-function changeToMain() {
-    document.getElementById("stats").classList.remove("active");
-    document.getElementById("evo-chain").classList.remove("active");
-    document.getElementById("details-content-main").style.display = "flex";
-    document.getElementById("details-content-stats").style.display = "none";
-    document.getElementById("details-content-evo-chain").style.display = "none";
-    document.getElementById("details-main").classList.add("active");
-}
+function changeTab(tab) {
+    const tabIds = ["main", "stats", "evo-chain"];
 
+    tabIds.forEach(id => {
+        const buttonId = id === "main" ? "details-main" : id;
+        const contentId = `details-content-${id}`;
 
-function changeToStats() {
-    document.getElementById("details-main").classList.remove("active");
-    document.getElementById("evo-chain").classList.remove("active");
-    document.getElementById("details-content-stats").style.display = "flex";
-    document.getElementById("details-content-main").style.display = "none";
-    document.getElementById("details-content-evo-chain").style.display = "none";
-    document.getElementById("stats").classList.add("active");
-}
-
-
-function changeToEvoChain() {
-    document.getElementById("stats").classList.remove("active");
-    document.getElementById("details-main").classList.remove("active");
-    document.getElementById("details-content-evo-chain").style.display = "flex";
-    document.getElementById("details-content-stats").style.display = "none";
-    document.getElementById("details-content-main").style.display = "none";
-    document.getElementById("evo-chain").classList.add("active");
+        document.getElementById(buttonId).classList.toggle("active", id === tab);
+        document.getElementById(contentId).style.display = id === tab ? "flex" : "none";
+    });
 }
 
 
