@@ -479,10 +479,6 @@ table {
 
 @media (max-width: 520px) {
 
-    .overlay {
-        height: unset;
-    }
-
     .overlay-area {
         width: 100%;
     }
