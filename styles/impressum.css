@@ -1,8 +1,6 @@
 .impressum_container {
     max-width: 800px;
     margin: 0 auto;
-    margin-top: 24px;
-    padding: 40px 20px;
     color: white;
     line-height: 1.6;
 }
@@ -19,13 +17,13 @@
 
 .impressum_container h2 {
     color: white;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     margin: 2rem 0 1rem;
 }
 
 .impressum_container p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1.1rem;
     text-align: left;
 }
@@ -37,9 +35,16 @@
     font-weight: 500;
 }
 
-.impressum_container a:hover {
-    color: #2980b9;
-    text-decoration: underline;
+a{
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+
+    &:hover {
+        color: #297fb9;
+        text-decoration: none;
+        text-shadow: 0 0 10px blue, 0 0 20px blue;
+    }
 }
 
 @media (max-width: 768px) {

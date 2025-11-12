@@ -95,11 +95,25 @@ footer {
     width: auto;
 }
 
+@media (max-width: 768px), (pointer: coarse) {
+    main{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
 @media (max-width: 520px) {
 
      .header_container {
         flex-direction: column;
         padding-top: 5px;
         padding-bottom: 5px;
+    }
+}
+
+@media (max-width: 480px), (pointer: coarse) {
+    main{
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }

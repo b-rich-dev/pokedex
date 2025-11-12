@@ -21,10 +21,10 @@ function getImpressumContent() {
                     63571 Gelnhausen</p>
 
                 <h2>Kontakt</h2>
-                <p>Telefon: 0175 1032571<br />
-                    E-Mail: lex8787@web.de</p>
+                <p>Telefon: <a href="tel:+491751032571">0175 1032571</a><br />
+                    E-Mail: <a href="mailto:info@birich.it">info@birich.it</a></p>
 
-                <p>Quelle: <a href="https://www.e-recht24.de">e-recht24.de</a></p>
+                <p>Quelle: <a href="https://www.e-recht24.de" target="_blank">e-recht24.de</a></p>
                 <p>Bildquellen und Urheberrechtshinweise:</p>
                 <p>Bilder sind von Pixabay, Lizenz: Pixabay License</p>
                 <p>Pokemon Logo ist von seeklogo.com, Lizenz: Seeklogo License</p>
