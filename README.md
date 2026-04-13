@@ -75,6 +75,39 @@ async function loadPokemon() {
 }
 ```
 
+## 🚀 Deployment
+
+### `up.bat` – Deploy in one command
+
+The `up.bat` script automates the complete deployment workflow:
+
+```bash
+up "your commit message"
+```
+
+**What it does:**
+1. `git pull` – fetches latest changes from remote
+2. `git add .` – stages all changes
+3. `git commit -m "..."` – commits with your message
+4. `git push` – pushes to GitHub
+5. `git ftp push` – deploys changed files to the live server ([pokedex.birich.it](https://pokedex.birich.it))
+
+> **Prerequisites:**
+> - **git-ftp** must be installed: [git-ftp.github.io](https://git-ftp.github.io)
+>   ```bash
+>   # Windows (with Chocolatey)
+>   choco install git-ftp
+>   ```
+> - git-ftp must be configured once:
+>   ```bash
+>   git config git-ftp.url "ftp://birich.it/pokedex.birich.it"
+>   git config git-ftp.user "YOUR_FTP_USER"
+>   git config git-ftp.password "YOUR_FTP_PASSWORD"
+>   git ftp init
+>   ```
+
+---
+
 ## 🚀 Installation & Setup
 
 ### Prerequisites
