@@ -22,12 +22,12 @@ function getImpressumContent() {
 
                 <h2>Kontakt</h2>
                 <p>Telefon: <a href="tel:+491751032571">0175 1032571</a><br />
-                    E-Mail: <a href="mailto:info@birich.it">info@birich.it</a></p>
+                    E-Mail: <a href="mailto:main@birich.dev" target="_blank">main@birich.dev</a></p>
 
                 <p>Quelle: <a href="https://www.e-recht24.de" target="_blank">e-recht24.de</a></p>
                 <p>Bildquellen und Urheberrechtshinweise:</p>
                 <p>Bilder sind von Pixabay, Lizenz: Pixabay License</p>
                 <p>Pokemon Logo ist von seeklogo.com, Lizenz: Seeklogo License</p>
-                <p>Alle Daten & Bilder von Pokemon sind von https://pokeapi.co</p>
+                <p>Alle Daten & Bilder von Pokemon sind von <a href="https://pokeapi.co" target="_blank" rel="noopener noreferrer">PokeAPI</a></p>
             </div>`
 }
